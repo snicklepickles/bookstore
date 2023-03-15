@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         etDescription = findViewById(R.id.description_id);
         etPrice = findViewById(R.id.price_id);
 
+        // load attributes after configuration change
         if (savedInstanceState == null || savedInstanceState.isEmpty()) {
             SharedPreferences prefs = getSharedPreferences("book", MODE_PRIVATE);
             etBookId.setText(prefs.getString(KEY_BOOK_ID, ""));
@@ -55,12 +56,14 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("MissingSuperCall")
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
+        // save title and isbn
         outState.putString(KEY_TITLE, etTitle.getText().toString());
         outState.putString(KEY_ISBN, etIsbn.getText().toString());
     }
 
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        // restore title and isbn
         etTitle.setText(savedInstanceState.getString(KEY_TITLE));
         etIsbn.setText(savedInstanceState.getString(KEY_ISBN));
     }
@@ -90,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClearFieldsBtnClick(View view) {
+        // clear fields
         etBookId.setText("");
         etTitle.setText("");
         etIsbn.setText("");
@@ -99,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onLoadBookBtnClick(View view) {
+        // load attributes
         SharedPreferences prefs = getSharedPreferences("book", MODE_PRIVATE);
         etBookId.setText(prefs.getString(KEY_BOOK_ID, ""));
         etTitle.setText(prefs.getString(KEY_TITLE, ""));
