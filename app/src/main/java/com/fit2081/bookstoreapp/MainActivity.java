@@ -16,12 +16,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        onLoadBookBtnClick(null);
+        if (savedInstanceState == null) {
+            onLoadBookBtnClick(null);
+        }
     }
 
     public void onAddBookBtnClick(View view) {
@@ -73,18 +70,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void onLoadBookBtnClick(View view) {
         SharedPreferences prefs = getSharedPreferences("book", MODE_PRIVATE);
-        String book_id = prefs.getString("book_id", "");
-        String title = prefs.getString("title", "");
-        String isbn = prefs.getString("isbn", "");
-        String author = prefs.getString("author", "");
-        String description = prefs.getString("description", "");
-        float price = prefs.getFloat("price", 0);
+        ((EditText) findViewById(R.id.book_id)).setText(prefs.getString("book_id", ""));
+        ((EditText) findViewById(R.id.title_id)).setText(prefs.getString("title", ""));
+        ((EditText) findViewById(R.id.isbn_id)).setText(prefs.getString("isbn", ""));
+        ((EditText) findViewById(R.id.author_id)).setText(prefs.getString("author", ""));
+        ((EditText) findViewById(R.id.description_id)).setText(prefs.getString("description", ""));
 
-        ((EditText) findViewById(R.id.book_id)).setText(book_id);
-        ((EditText) findViewById(R.id.title_id)).setText(title);
-        ((EditText) findViewById(R.id.isbn_id)).setText(isbn);
-        ((EditText) findViewById(R.id.author_id)).setText(author);
-        ((EditText) findViewById(R.id.description_id)).setText(description);
+        float price = prefs.getFloat("price", 0);
         if (price == 0) {
             ((EditText) findViewById(R.id.price_id)).setText("");
         } else if (price == Math.round(price)) {
