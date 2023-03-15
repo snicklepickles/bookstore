@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         etDescription = findViewById(R.id.description_id);
         etPrice = findViewById(R.id.price_id);
 
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null || savedInstanceState.isEmpty()) {
             SharedPreferences prefs = getSharedPreferences("book", MODE_PRIVATE);
             etBookId.setText(prefs.getString(KEY_BOOK_ID, ""));
             etTitle.setText(prefs.getString(KEY_TITLE, ""));
