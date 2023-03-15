@@ -30,14 +30,8 @@ public class MainActivity extends AppCompatActivity {
         EditText descriptionEt = findViewById(R.id.description_id);
         EditText priceEt = findViewById(R.id.price_id);
 
-        // get attributes
-        String bookId = bookIdEt.getText().toString();
+        // get attributes for toast
         String title = titleEt.getText().toString();
-        String isbn = isbnEt.getText().toString();
-        String author = authorEt.getText().toString();
-        String description = descriptionEt.getText().toString();
-
-        // get isbn and price (default to 0 if empty)
         float price = 0;
         if (!priceEt.getText().toString().isEmpty()) {
             price = Float.parseFloat(priceEt.getText().toString());
@@ -50,11 +44,11 @@ public class MainActivity extends AppCompatActivity {
         // save attributes
         SharedPreferences prefs = getSharedPreferences("book", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("book_id", bookId);
+        editor.putString("book_id", bookIdEt.getText().toString());
         editor.putString("title", title);
-        editor.putString("isbn", isbn);
-        editor.putString("author", author);
-        editor.putString("description", description);
+        editor.putString("isbn", isbnEt.getText().toString());
+        editor.putString("author", authorEt.getText().toString());
+        editor.putString("description", descriptionEt.getText().toString());
         editor.putFloat("price", price);
         editor.apply();
     }
