@@ -42,14 +42,8 @@ public class MainActivity extends AppCompatActivity {
         etPrice = findViewById(R.id.price_id);
 
         // load attributes after configuration change
-        if (savedInstanceState == null || savedInstanceState.isEmpty()) {
-            SharedPreferences prefs = getSharedPreferences("book", MODE_PRIVATE);
-            etBookId.setText(prefs.getString(KEY_BOOK_ID, ""));
-            etTitle.setText(prefs.getString(KEY_TITLE, ""));
-            etIsbn.setText(prefs.getString(KEY_ISBN, ""));
-            etAuthor.setText(prefs.getString(KEY_AUTHOR, ""));
-            etDescription.setText(prefs.getString(KEY_DESCRIPTION, ""));
-            etPrice.setText(prefs.getString(KEY_PRICE, ""));
+        if (savedInstanceState == null) {
+            loadBooks();
         }
     }
 
@@ -103,7 +97,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onLoadBookBtnClick(View view) {
-        // load attributes
+        loadBooks();
+    }
+
+    public void loadBooks() {
+        // load book attributes
         SharedPreferences prefs = getSharedPreferences("book", MODE_PRIVATE);
         etBookId.setText(prefs.getString(KEY_BOOK_ID, ""));
         etTitle.setText(prefs.getString(KEY_TITLE, ""));
