@@ -16,6 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BookStoreApp"
         tools:targetApi="31">
+
+<!--        registers the SMSReceiver class to receive SMS messages-->
         <receiver
             android:name=".SMSReceiver"
             android:enabled="true"
