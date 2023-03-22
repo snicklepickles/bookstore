@@ -10,4 +10,6 @@
     <color name="magenta">#ffdf24c4</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="pink">#fffe8fab</color>
+    <color name="dark_pink">#fffb6f93</color>
 </resources>
