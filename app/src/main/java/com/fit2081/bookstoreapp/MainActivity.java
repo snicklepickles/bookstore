@@ -132,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
         // executed when SMSReceiver sends a broadcast
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d("MyBroadCastReceiver", "onReceive: ");
             // get message from the intent
             String msg = intent.getStringExtra(SMSReceiver.SMS_MSG_KEY);
 

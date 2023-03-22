@@ -14,7 +14,6 @@ public class SMSReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("SMSReceiver", "onReceive: ");
         // use the Telephony class to extract the incoming messages from the intent
         SmsMessage[] messages = Telephony.Sms.Intents.getMessagesFromIntent(intent);
         for (SmsMessage currentMessage : messages) {
