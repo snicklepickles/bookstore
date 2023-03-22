@@ -2,10 +2,16 @@ package com.fit2081.bookstoreapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -13,6 +19,7 @@ import android.widget.Toast;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.Locale;
+import java.util.StringTokenizer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,6 +52,16 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             loadBooks();
         }
+
+        // request permissions to access SMS
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.SEND_SMS, android.Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS}, 0);
+
+        // create and instantiate the local broadcast receiver (listens to messages from SMSReceiver)
+        MyBroadCastReceiver myBroadCastReceiver = new MyBroadCastReceiver();
+
+        // register the broadcast handler with the intent filter that is declared in SMSReceiver
+        registerReceiver(myBroadCastReceiver, new android.content.IntentFilter(SMSReceiver.SMS_FILTER));
+
     }
 
     @SuppressLint("MissingSuperCall")
@@ -109,5 +126,24 @@ public class MainActivity extends AppCompatActivity {
         etAuthor.setText(prefs.getString(KEY_AUTHOR, ""));
         etDescription.setText(prefs.getString(KEY_DESCRIPTION, ""));
         etPrice.setText(prefs.getString(KEY_PRICE, ""));
+    }
+
+    class MyBroadCastReceiver extends BroadcastReceiver {
+        // executed when SMSReceiver sends a broadcast
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("MyBroadCastReceiver", "onReceive: ");
+            // get message from the intent
+            String msg = intent.getStringExtra(SMSReceiver.SMS_MSG_KEY);
+
+            // parse message and update the UI
+            StringTokenizer sT = new StringTokenizer(msg, "|");
+            etBookId.setText(sT.nextToken());
+            etTitle.setText(sT.nextToken());
+            etIsbn.setText(sT.nextToken());
+            etAuthor.setText(sT.nextToken());
+            etDescription.setText(sT.nextToken());
+            etPrice.setText(sT.nextToken());
+        }
     }
 }
