@@ -1,7 +1,9 @@
 package com.fit2081.bookstoreapp;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
@@ -12,9 +14,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NonNls;
 
@@ -35,11 +42,13 @@ public class MainActivity extends AppCompatActivity {
     private EditText etAuthor;
     private EditText etDescription;
     private EditText etPrice;
+    private androidx.drawerlayout.widget.DrawerLayout drawerlayout;
+    private androidx.appcompat.widget.Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.drawer_layout);
 
         etBookId = findViewById(R.id.book_id);
         etTitle = findViewById(R.id.title_id);
@@ -48,10 +57,21 @@ public class MainActivity extends AppCompatActivity {
         etDescription = findViewById(R.id.description_id);
         etPrice = findViewById(R.id.price_id);
 
+        drawerlayout = findViewById(R.id.drawer_layout);
+        toolbar = findViewById(R.id.toolbar);
+
         // load attributes after configuration change
         if (savedInstanceState == null) {
             loadBooks();
         }
+
+        // tell the activity to use our toolbar as the action bar
+        setSupportActionBar(toolbar);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerlayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerlayout.addDrawerListener(toggle);
+        toggle.syncState();
 
         // request permissions to access SMS
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.SEND_SMS, android.Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS}, 0);
@@ -62,6 +82,15 @@ public class MainActivity extends AppCompatActivity {
         // register the broadcast handler with the intent filter that is declared in SMSReceiver
         registerReceiver(myBroadCastReceiver, new android.content.IntentFilter(SMSReceiver.SMS_FILTER));
 
+        FloatingActionButton fab = findViewById(R.id.fab);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
     }
 
     @SuppressLint("MissingSuperCall")
@@ -143,6 +172,25 @@ public class MainActivity extends AppCompatActivity {
             etAuthor.setText(sT.nextToken());
             etDescription.setText(sT.nextToken());
             etPrice.setText(sT.nextToken());
+        }
+    }
+
+    // handle the menu item clicks
+    class MyNavigationListener implements NavigationView.OnNavigationItemSelectedListener {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            // get the id of the selected item
+            int id = item.getItemId();
+
+            if (id == R.id.add_item_menu_id) {
+                // Do something
+            } else if (id == R.id.clear_fields_menu_id) {
+                // Do something
+            }
+            // close the drawer
+            drawerlayout.closeDrawers();
+            // tell the OS
+            return true;
         }
     }
 }
