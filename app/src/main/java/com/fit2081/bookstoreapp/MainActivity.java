@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -192,5 +193,24 @@ public class MainActivity extends AppCompatActivity {
             // tell the OS
             return true;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.options_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.option_item_id_1) {
+            // Do something
+        } else if (id == R.id.option_item_id_1) {
+            // Do something
+        }
+        // tell the OS
+        return true;
     }
 }
