@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    public void onClearFieldsBtnClick(View view) {
+    public void clearFields() {
         // clear fields
         etBookId.setText("");
         etTitle.setText("");
@@ -141,10 +141,6 @@ public class MainActivity extends AppCompatActivity {
         etAuthor.setText("");
         etDescription.setText("");
         etPrice.setText("");
-    }
-
-    public void onLoadBookBtnClick(View view) {
-        loadBooks();
     }
 
     public void loadBooks() {
@@ -205,10 +201,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.option_item_id_1) {
-            // Do something
-        } else if (id == R.id.option_item_id_1) {
-            // Do something
+        if (id == R.id.clear_fields_menu_id) {
+            clearFields();
+        } else if (id == R.id.load_data_menu_id) {
+            loadBooks();
         }
         // tell the OS
         return true;
