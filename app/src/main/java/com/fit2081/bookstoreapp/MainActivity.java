@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -17,7 +19,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -26,6 +30,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NonNls;
 
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
@@ -43,8 +48,11 @@ public class MainActivity extends AppCompatActivity {
     private EditText etAuthor;
     private EditText etDescription;
     private EditText etPrice;
-    private androidx.drawerlayout.widget.DrawerLayout drawerlayout;
-    private androidx.appcompat.widget.Toolbar toolbar;
+    private DrawerLayout drawerlayout;
+    ArrayList<String> bookTitles = new ArrayList<>();
+    ArrayAdapter<String> bookTitlesAdapter;
+    private ListView bookTitlesListView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,21 +66,24 @@ public class MainActivity extends AppCompatActivity {
         etDescription = findViewById(R.id.description_id);
         etPrice = findViewById(R.id.price_id);
 
-        drawerlayout = findViewById(R.id.drawer_layout);
-        toolbar = findViewById(R.id.toolbar);
-
         // load attributes after configuration change
         if (savedInstanceState == null) {
             loadBooks();
         }
 
+        drawerlayout = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+
         // tell the activity to use our toolbar as the action bar
         setSupportActionBar(toolbar);
 
+        // set up the navigation drawer
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerlayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerlayout.addDrawerListener(toggle);
         toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(new MyNavigationListener());
 
         // request permissions to access SMS
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.SEND_SMS, android.Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS}, 0);
@@ -85,13 +96,11 @@ public class MainActivity extends AppCompatActivity {
 
         FloatingActionButton fab = findViewById(R.id.fab);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(view -> addBook());
+
+        bookTitlesListView =  findViewById(R.id.book_titles_list_view);
+        bookTitlesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, bookTitles);
+        bookTitlesListView.setAdapter(bookTitlesAdapter);
     }
 
     @SuppressLint("MissingSuperCall")
@@ -109,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         etIsbn.setText(savedInstanceState.getString(KEY_ISBN));
     }
 
-    public void onAddBookBtnClick(View view) {
+    public void addBook() {
         // get title and price
         String title = etTitle.getText().toString();
         float price = 0;
@@ -131,6 +140,10 @@ public class MainActivity extends AppCompatActivity {
         editor.putString(KEY_DESCRIPTION, etDescription.getText().toString());
         editor.putString(KEY_PRICE, etPrice.getText().toString());
         editor.apply();
+
+        // add book title to list
+        bookTitles.add(title + " | " + price);
+        bookTitlesAdapter.notifyDataSetChanged();
     }
 
     public void clearFields() {
@@ -179,12 +192,15 @@ public class MainActivity extends AppCompatActivity {
             // get the id of the selected item
             int id = item.getItemId();
 
-            if (id == R.id.add_item_menu_id) {
-                // Do something
-            } else if (id == R.id.clear_fields_menu_id) {
-                // Do something
+            if (id == R.id.add_book_menu_id) {
+                addBook();
+            } else if (id == R.id.remove_last_menu_id) {
+                bookTitles.remove(bookTitles.size() - 1);
+                bookTitlesAdapter.notifyDataSetChanged();
+            } else if (id == R.id.remove_all_menu_id) {
+                bookTitles.clear();
+                bookTitlesAdapter.notifyDataSetChanged();
             }
-            // close the drawer
             drawerlayout.closeDrawers();
             // tell the OS
             return true;

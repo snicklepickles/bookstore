@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/add_item_menu_id"
-        android:title="Add Item" />
+        android:id="@+id/add_book_menu_id"
+        android:title="Add Book" />
     <item
-        android:id="@+id/clear_fields_menu_id"
-        android:title="Clear Fields" />
+        android:id="@+id/remove_last_menu_id"
+        android:title="Remove Last" />
+    <item
+        android:id="@+id/remove_all_menu_id"
+        android:title="Remove All" />
 </menu>

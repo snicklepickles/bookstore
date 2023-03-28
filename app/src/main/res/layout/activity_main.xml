@@ -114,23 +114,6 @@
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
         app:layout_constraintTop_toBottomOf="@+id/book_id_label" />
 
-    <Button
-        android:id="@+id/add_book_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="5sp"
-        android:layout_marginTop="20sp"
-        android:background="@drawable/gradient"
-        android:onClick="onAddBookBtnClick"
-        android:paddingLeft="10sp"
-        android:paddingRight="10sp"
-        android:text="Add Book"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="@id/left_guideline"
-        app:layout_constraintTop_toTopOf="@+id/bottom_guideline" />
-
     <EditText
         android:id="@+id/isbn_id"
         android:layout_width="wrap_content"
@@ -180,5 +163,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.03" />
+
+    <ListView
+        android:id="@+id/book_titles_list_view"
+        android:layout_width="357dp"
+        android:layout_height="284dp"
+        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
+        app:layout_constraintStart_toStartOf="@+id/left_guideline"
+        app:layout_constraintTop_toTopOf="@+id/bottom_guideline" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
