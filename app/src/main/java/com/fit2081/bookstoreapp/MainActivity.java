@@ -3,10 +3,11 @@ package com.fit2081.bookstoreapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -18,17 +19,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
-
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -49,10 +44,9 @@ public class MainActivity extends AppCompatActivity {
     private EditText etDescription;
     private EditText etPrice;
     private DrawerLayout drawerlayout;
-    ArrayList<String> bookTitles = new ArrayList<>();
-    ArrayAdapter<String> bookTitlesAdapter;
-    private ListView bookTitlesListView;
-
+    private ArrayList<Book> data = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private BookRecyclerAdapter bookTitlesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,9 +92,13 @@ public class MainActivity extends AppCompatActivity {
 
         fab.setOnClickListener(view -> addBook());
 
-        bookTitlesListView =  findViewById(R.id.book_titles_list_view);
-        bookTitlesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, bookTitles);
-        bookTitlesListView.setAdapter(bookTitlesAdapter);
+        // set up the recycler view
+        recyclerView = findViewById(R.id.book_titles_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        bookTitlesAdapter = new BookRecyclerAdapter();
+        bookTitlesAdapter.setData(data);
+        recyclerView.setAdapter(bookTitlesAdapter);
     }
 
     @SuppressLint("MissingSuperCall")
@@ -119,8 +117,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addBook() {
-        // get title and price
+        // get attributes
+        String bookId = etBookId.getText().toString();
         String title = etTitle.getText().toString();
+        String isbn = etIsbn.getText().toString();
+        String author = etAuthor.getText().toString();
+        String description = etDescription.getText().toString();
+        String priceStr = etPrice.getText().toString();
+
         float price = 0;
         if (!etPrice.getText().toString().isEmpty()) {
             price = Float.parseFloat(etPrice.getText().toString());
@@ -133,17 +137,19 @@ public class MainActivity extends AppCompatActivity {
         // save attributes
         SharedPreferences prefs = getSharedPreferences("book", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(KEY_BOOK_ID, etBookId.getText().toString());
+        editor.putString(KEY_BOOK_ID, bookId);
         editor.putString(KEY_TITLE, title);
-        editor.putString(KEY_ISBN, etIsbn.getText().toString());
-        editor.putString(KEY_AUTHOR, etAuthor.getText().toString());
-        editor.putString(KEY_DESCRIPTION, etDescription.getText().toString());
-        editor.putString(KEY_PRICE, etPrice.getText().toString());
+        editor.putString(KEY_ISBN, isbn);
+        editor.putString(KEY_AUTHOR, author);
+        editor.putString(KEY_DESCRIPTION, description);
+        editor.putString(KEY_PRICE, priceStr);
         editor.apply();
 
-        // add book title to list
-        bookTitles.add(title + " | " + price);
+        // add book to recycler view
+        Book book = new Book(bookId, title, isbn, author, description, priceStr);
+        data.add(book);
         bookTitlesAdapter.notifyDataSetChanged();
+        Log.d("BOOK_APP", "Added book: " + book);
     }
 
     public void clearFields() {
@@ -195,10 +201,10 @@ public class MainActivity extends AppCompatActivity {
             if (id == R.id.add_book_menu_id) {
                 addBook();
             } else if (id == R.id.remove_last_menu_id) {
-                bookTitles.remove(bookTitles.size() - 1);
+                data.remove(data.size() - 1);
                 bookTitlesAdapter.notifyDataSetChanged();
             } else if (id == R.id.remove_all_menu_id) {
-                bookTitles.clear();
+                data.clear();
                 bookTitlesAdapter.notifyDataSetChanged();
             }
             drawerlayout.closeDrawers();
