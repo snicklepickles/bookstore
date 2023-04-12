@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/add_book_menu_id"
-        android:title="Add Book" />
+        android:title="@string/add_book" />
     <item
         android:id="@+id/remove_last_menu_id"
-        android:title="Remove Last" />
+        android:title="@string/remove_last" />
     <item
         android:id="@+id/remove_all_menu_id"
-        android:title="Remove All" />
+        android:title="@string/remove_all" />
     <item
         android:id="@+id/list_all_menu_id"
-        android:title="List All" />
+        android:title="@string/list_all" />
 </menu>
