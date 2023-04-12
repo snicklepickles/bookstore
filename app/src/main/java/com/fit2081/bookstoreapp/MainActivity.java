@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity {
         // register the broadcast handler with the intent filter that is declared in SMSReceiver
         registerReceiver(myBroadCastReceiver, new android.content.IntentFilter(SMSReceiver.SMS_FILTER));
 
+        // set up the floating action button
         FloatingActionButton fab = findViewById(R.id.fab);
-
         fab.setOnClickListener(view -> addBook());
 
         // load the fragment
