@@ -30,7 +30,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.idTv.setText(String.format("ID: %s", data.get(position).getId()));
-        holder.bookIdTv.setText(String.format("ID: %s", data.get(position).getBookId()));
+        holder.bookIdTv.setText(String.format("Book ID: %s", data.get(position).getBookId()));
         holder.titleTv.setText(String.format("Title: %s", data.get(position).getTitle()));
         holder.isbnTv.setText(String.format("ISBN: %s", data.get(position).getIsbn()));
         holder.authorTv.setText(String.format("Author: %s", data.get(position).getAuthor()));

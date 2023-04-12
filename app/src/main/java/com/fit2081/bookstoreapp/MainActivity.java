@@ -205,7 +205,8 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.remove_all_menu_id) {
                 mBookViewModel.deleteAll();
             } else if (id == R.id.list_all_menu_id) {
-                // do something
+                Intent i = new Intent(MainActivity.this,BookListActivity.class);
+                startActivity(i);
             }
             drawerlayout.closeDrawers();
             // tell the OS
