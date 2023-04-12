@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,6 +24,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.fit2081.bookstoreapp.provider.Book;
+import com.fit2081.bookstoreapp.provider.BookViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -45,9 +47,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText etDescription;
     private EditText etPrice;
     private DrawerLayout drawerlayout;
-    private final ArrayList<Book> data = new ArrayList<>();
-    private RecyclerView recyclerView;
     private BookAdapter bookAdapter;
+    private BookViewModel mBookViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,12 +95,18 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(view -> addBook());
 
         // set up the recycler view
-        recyclerView = findViewById(R.id.book_titles_recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.book_titles_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         bookAdapter = new BookAdapter();
-        bookAdapter.setData(data);
+        // bookAdapter.setData(data);
         recyclerView.setAdapter(bookAdapter);
+        mBookViewModel = new ViewModelProvider(this).get(BookViewModel.class);
+        mBookViewModel.getAllBooks().observe(this, books -> {
+            // Update the cached copy of the books in the adapter
+            bookAdapter.setData(books);
+            bookAdapter.notifyDataSetChanged();
+        });
     }
 
     @SuppressLint("MissingSuperCall")
@@ -148,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
         // add book to recycler view
         Book book = new Book(bookId, title, isbn, author, description, priceStr);
-        data.add(book);
+        mBookViewModel.insert(book);
         bookAdapter.notifyDataSetChanged();
         Log.d("BOOK_APP", "Added book: " + book);
     }
@@ -202,10 +209,10 @@ public class MainActivity extends AppCompatActivity {
             if (id == R.id.add_book_menu_id) {
                 addBook();
             } else if (id == R.id.remove_last_menu_id) {
-                data.remove(data.size() - 1);
+                mBookViewModel.deleteLastBook();
                 bookAdapter.notifyDataSetChanged();
             } else if (id == R.id.remove_all_menu_id) {
-                data.clear();
+                mBookViewModel.deleteAll();
                 bookAdapter.notifyDataSetChanged();
             }
             drawerlayout.closeDrawers();

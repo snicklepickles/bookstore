@@ -15,13 +15,23 @@
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent"
+            tools:text="ID" />
+
+        <TextView
             android:id="@+id/book_id"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="13sp"
             card_view:layout_constraintEnd_toStartOf="@+id/title_id"
             card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/id"
             tools:text="Book ID" />
 
         <TextView
@@ -31,7 +41,7 @@
             android:textSize="13sp"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toEndOf="@+id/book_id"
-            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintTop_toTopOf="@+id/book_id"
             tools:text="Title" />
 
         <TextView

@@ -10,12 +10,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fit2081.bookstoreapp.provider.Book;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>{
-    private ArrayList<Book> data = new ArrayList<>();
+    private List<Book> data;
 
-    public void setData(ArrayList<Book> data) {
+    public void setData(List<Book> data) {
         this.data = data;
     }
 
@@ -29,6 +29,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.idTv.setText(String.format("ID: %s", data.get(position).getId()));
         holder.bookIdTv.setText(String.format("ID: %s", data.get(position).getBookId()));
         holder.titleTv.setText(String.format("Title: %s", data.get(position).getTitle()));
         holder.isbnTv.setText(String.format("ISBN: %s", data.get(position).getIsbn()));
@@ -39,10 +40,14 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>{
 
     @Override
     public int getItemCount() {
-        return data.size();
+        if (data == null)
+            return 0;
+        else
+            return data.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextView idTv;
         private final TextView bookIdTv;
         private final TextView titleTv;
         private final TextView isbnTv;
@@ -52,12 +57,14 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>{
 
         public ViewHolder(@NonNull View bookView) {
             super(bookView);
+            idTv = bookView.findViewById(R.id.id);
             bookIdTv = bookView.findViewById(R.id.book_id);
             titleTv = bookView.findViewById(R.id.title_id);
             isbnTv = bookView.findViewById(R.id.isbn_id);
             authorTv = bookView.findViewById(R.id.author_id);
             descriptionTv = bookView.findViewById(R.id.description_id);
             priceTv = bookView.findViewById(R.id.price_id);
+
         }
     }
 }
