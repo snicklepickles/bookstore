@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
 
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
@@ -15,14 +15,13 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.BookStoreApp"
-        tools:targetApi="31">
-
-<!--        registers the SMSReceiver class to receive SMS messages-->
+        tools:targetApi="31" >
+        <!-- registers the SMSReceiver class to receive SMS messages -->
         <receiver
             android:name=".SMSReceiver"
             android:enabled="true"
             android:exported="true"
-            android:permission="android.permission.BROADCAST_SMS">
+            android:permission="android.permission.BROADCAST_SMS" >
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
@@ -30,13 +29,14 @@
 
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

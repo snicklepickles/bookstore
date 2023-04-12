@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText etDescription;
     private EditText etPrice;
     private DrawerLayout drawerlayout;
-    private BookAdapter bookAdapter;
     private BookViewModel mBookViewModel;
 
     @Override
@@ -94,19 +93,13 @@ public class MainActivity extends AppCompatActivity {
 
         fab.setOnClickListener(view -> addBook());
 
-        // set up the recycler view
-        RecyclerView recyclerView = findViewById(R.id.book_titles_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // load the fragment
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .add(R.id.book_frag, BookListFragment.class, null)
+                .commit();
 
-        bookAdapter = new BookAdapter();
-        // bookAdapter.setData(data);
-        recyclerView.setAdapter(bookAdapter);
         mBookViewModel = new ViewModelProvider(this).get(BookViewModel.class);
-        mBookViewModel.getAllBooks().observe(this, books -> {
-            // Update the cached copy of the books in the adapter
-            bookAdapter.setData(books);
-            bookAdapter.notifyDataSetChanged();
-        });
     }
 
     @SuppressLint("MissingSuperCall")
@@ -156,7 +149,6 @@ public class MainActivity extends AppCompatActivity {
         // add book to recycler view
         Book book = new Book(bookId, title, isbn, author, description, priceStr);
         mBookViewModel.insert(book);
-        bookAdapter.notifyDataSetChanged();
         Log.d("BOOK_APP", "Added book: " + book);
     }
 
@@ -210,10 +202,10 @@ public class MainActivity extends AppCompatActivity {
                 addBook();
             } else if (id == R.id.remove_last_menu_id) {
                 mBookViewModel.deleteLastBook();
-                bookAdapter.notifyDataSetChanged();
             } else if (id == R.id.remove_all_menu_id) {
                 mBookViewModel.deleteAll();
-                bookAdapter.notifyDataSetChanged();
+            } else if (id == R.id.list_all_menu_id) {
+                // do something
             }
             drawerlayout.closeDrawers();
             // tell the OS
