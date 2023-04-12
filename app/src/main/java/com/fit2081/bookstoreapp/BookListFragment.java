@@ -18,23 +18,17 @@ public class BookListFragment extends Fragment {
     private final BookAdapter bookAdapter = new BookAdapter();
 
     public BookListFragment() {
-        // Required empty public constructor
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_book_list, container, false);
-        RecyclerView recyclerView = view.findViewById(R.id.book_titles_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(bookAdapter);
-        return view;
+        super(R.layout.fragment_book_list);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        RecyclerView recyclerView = view.findViewById(R.id.book_titles_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(bookAdapter);
         BookViewModel mBookViewModel = new ViewModelProvider(requireActivity()).get(BookViewModel.class);
+        // Add an observer on the LiveData returned by getAllBooks
         mBookViewModel.getAllBooks().observe(getViewLifecycleOwner(), books -> {
             // Update the cached copy of the books in the adapter
             bookAdapter.setData(books);
