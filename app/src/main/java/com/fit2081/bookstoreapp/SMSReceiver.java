@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.provider.Telephony;
 import android.telephony.SmsMessage;
-import android.util.Log;
-
 
 public class SMSReceiver extends BroadcastReceiver {
     public static final String SMS_FILTER = "SMS_FILTER";
