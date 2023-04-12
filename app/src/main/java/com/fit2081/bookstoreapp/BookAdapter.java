@@ -8,9 +8,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.fit2081.bookstoreapp.provider.Book;
+
 import java.util.ArrayList;
 
-public class BookRecyclerAdapter extends RecyclerView.Adapter<BookRecyclerAdapter.ViewHolder>{
+public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>{
     private ArrayList<Book> data = new ArrayList<>();
 
     public void setData(ArrayList<Book> data) {
