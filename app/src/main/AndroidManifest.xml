@@ -6,6 +6,12 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.WRITE_SMS" />
+    <permission android:name="fit2081.READ_PERMISSION" android:protectionLevel="normal" />
+    <permission android:name="fit2081.WRITE_PERMISSION" android:protectionLevel="normal" />
+
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -16,14 +22,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BookStoreApp"
         tools:targetApi="31">
+        <provider
+            android:name=".provider.MyTasksContentProvider"
+            android:readPermission="fit2081.READ_PERMISSION"
+            android:writePermission="fit2081.WRITE_PERMISSION"
+            android:authorities="fit2081.tasks.db.provider"
+            android:enabled="true"
+            android:exported="true" />
+
         <activity
             android:name=".BookListActivity"
             android:exported="false">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
-        </activity>
-        <!-- registers the SMSReceiver class to receive SMS messages -->
+        </activity> <!-- registers the SMSReceiver class to receive SMS messages -->
         <receiver
             android:name=".SMSReceiver"
             android:enabled="true"
