@@ -25,6 +25,8 @@ import com.fit2081.bookstoreapp.provider.Book;
 import com.fit2081.bookstoreapp.provider.BookViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Locale;
 import java.util.StringTokenizer;
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText etPrice;
     private DrawerLayout drawerlayout;
     private BookViewModel mBookViewModel;
+    private DatabaseReference mTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +100,10 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
 
         mBookViewModel = new ViewModelProvider(this).get(BookViewModel.class);
+
+        // initialise Firebase database
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        mTable = mDatabase.child("books");
     }
 
     @SuppressLint("MissingSuperCall")
@@ -146,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
         // add book to recycler view
         Book book = new Book(bookId, title, isbn, author, description, priceStr);
         mBookViewModel.insert(book);
+        mTable.push().setValue(book);
         Log.d("BOOK_APP", "Added book: " + book);
     }
 
@@ -201,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
                 mBookViewModel.deleteLastBook();
             } else if (id == R.id.remove_all_menu_id) {
                 mBookViewModel.deleteAll();
+                mTable.removeValue();
             } else if (id == R.id.list_all_menu_id) {
                 Intent i = new Intent(MainActivity.this,BookListActivity.class);
                 startActivity(i);
