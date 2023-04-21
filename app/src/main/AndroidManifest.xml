@@ -23,10 +23,10 @@
         android:theme="@style/Theme.BookStoreApp"
         tools:targetApi="31">
         <provider
-            android:name=".provider.MyTasksContentProvider"
+            android:name=".provider.BookContentProvider"
             android:readPermission="fit2081.READ_PERMISSION"
             android:writePermission="fit2081.WRITE_PERMISSION"
-            android:authorities="fit2081.tasks.db.provider"
+            android:authorities="fit2081.app.PHOEBE"
             android:enabled="true"
             android:exported="true" />
 

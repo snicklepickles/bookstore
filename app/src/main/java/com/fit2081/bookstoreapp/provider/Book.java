@@ -1,12 +1,15 @@
 package com.fit2081.bookstoreapp.provider;
 
+import static com.fit2081.bookstoreapp.provider.Book.TABLE_NAME;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "books")
+@Entity(tableName = TABLE_NAME)
 public class Book {
+    public static final String TABLE_NAME = "books";
     @PrimaryKey(autoGenerate = true)
     @NonNull
     @ColumnInfo(name = "id")
@@ -62,7 +65,7 @@ public class Book {
         return price;
     }
 
-    public void setId(@NonNull int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
