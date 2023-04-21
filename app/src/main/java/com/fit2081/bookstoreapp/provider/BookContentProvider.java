@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 
 public class BookContentProvider extends ContentProvider {
 
-    public static final String CONTENT_AUTHORITY = "fit2081.tasks.db.provider";
+    public static final String CONTENT_AUTHORITY = "fit2081.app.PHOEBE";
 
     public static final Uri CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
