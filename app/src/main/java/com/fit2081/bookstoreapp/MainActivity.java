@@ -18,6 +18,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -48,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerlayout;
     private BookViewModel mBookViewModel;
     private DatabaseReference mTable;
+    private float initialX;
+    private float initialY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +108,39 @@ public class MainActivity extends AppCompatActivity {
         // initialise Firebase database
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         mTable = mDatabase.child("books");
+
+        // register onTouchListener
+        View gestureView = findViewById(R.id.gesture_view);
+        gestureView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                switch (event.getAction()) {
+                    case (MotionEvent.ACTION_DOWN):
+                        initialX = event.getX();
+                        initialY = event.getY();
+                        return true;
+                    case (MotionEvent.ACTION_MOVE):
+                        return true;
+                    case (MotionEvent.ACTION_UP):
+                        float deltaX = event.getX() - initialX;
+                        float deltaY = event.getY() - initialY;
+
+                        if (deltaX > 100) { // swipe right
+                            // increment price by 1
+                            String priceStr = etPrice.getText().toString();
+                            float price = priceStr.isEmpty() ? 0 : Float.parseFloat(priceStr);
+                            etPrice.setText(String.valueOf(++price));
+                        } else if (deltaX < -100) { // swipe left
+                            addBook();
+                        } else if (deltaY < -100) { // swipe up
+                            clearFields();
+                        }
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
     }
 
     @SuppressLint("MissingSuperCall")

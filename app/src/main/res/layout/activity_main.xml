@@ -62,7 +62,8 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/title_label"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
-        app:layout_constraintTop_toTopOf="@id/top_guideline" />
+        app:layout_constraintTop_toTopOf="@id/top_guideline"
+        android:labelFor="@id/book_id"/>
 
     <TextView
         android:id="@+id/isbn_label"
@@ -72,7 +73,8 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/author_label"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/title_label" />
+        app:layout_constraintTop_toBottomOf="@+id/title_label"
+        android:labelFor="@id/isbn_id"/>
 
     <TextView
         android:id="@+id/price_label"
@@ -82,7 +84,8 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/description_label" />
+        app:layout_constraintTop_toBottomOf="@+id/description_label"
+        android:labelFor="@id/price_id"/>
 
     <TextView
         android:id="@+id/description_label"
@@ -92,7 +95,8 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/price_label"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/author_label" />
+        app:layout_constraintTop_toBottomOf="@+id/author_label"
+        android:labelFor="@id/description_id"/>
 
     <TextView
         android:id="@+id/author_label"
@@ -102,7 +106,8 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/description_label"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/isbn_label" />
+        app:layout_constraintTop_toBottomOf="@+id/isbn_label"
+        android:labelFor="@id/author_id"/>
 
     <TextView
         android:id="@+id/title_label"
@@ -112,7 +117,8 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/isbn_label"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/book_id_label" />
+        app:layout_constraintTop_toBottomOf="@+id/book_id_label"
+        android:labelFor="@id/title_id"/>
 
     <EditText
         android:id="@+id/isbn_id"
@@ -148,7 +154,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.45" />
+        app:layout_constraintGuide_percent="0.70" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/right_guideline"
@@ -162,7 +168,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.03" />
+        app:layout_constraintGuide_percent="0.25" />
 
     <FrameLayout
         android:id="@+id/book_frag"
@@ -171,7 +177,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/right_guideline"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
-        app:layout_constraintTop_toTopOf="@+id/bottom_guideline">
-    </FrameLayout>
+        app:layout_constraintTop_toTopOf="@+id/bottom_guideline" />
+
+    <View
+        android:id="@+id/gesture_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/pink"
+        app:layout_constraintBottom_toTopOf="@+id/top_guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
