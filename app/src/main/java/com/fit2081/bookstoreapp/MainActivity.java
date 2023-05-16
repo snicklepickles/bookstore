@@ -115,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
         gestureView.setOnTouchListener(new View.OnTouchListener() {
             private float initialX;
             private float initialY;
-            private float lastX;
             private final int MOVEMENT_THRESHOLD = 125;
 
             @Override
@@ -124,28 +123,14 @@ public class MainActivity extends AppCompatActivity {
                     case (MotionEvent.ACTION_DOWN):
                         initialX = event.getX();
                         initialY = event.getY();
-                        lastX = initialX;
-                        return true;
-                    case (MotionEvent.ACTION_MOVE):
-                        float currentX = event.getX();
-                        float deltaY = event.getY() - initialY;
-                        float deltaX = currentX - initialX;
-
-                        if (deltaX > MOVEMENT_THRESHOLD && Math.abs(deltaY) < MOVEMENT_THRESHOLD && currentX > lastX) { // swipe right
-                            String priceStr = etPrice.getText().toString();
-                            float price = priceStr.isEmpty() ? 0 : Float.parseFloat(priceStr);
-                            etPrice.setText(String.valueOf(++price));
-                            lastX = currentX;
-                        }
                         return true;
                     case (MotionEvent.ACTION_UP):
-                        deltaX = event.getX() - initialX;
-                        deltaY = event.getY() - initialY;
-
+                        float deltaX = event.getX() - initialX;
+                        float deltaY = event.getY() - initialY;
                         if (Math.abs(deltaX) > MOVEMENT_THRESHOLD && Math.abs(deltaY) > MOVEMENT_THRESHOLD) {
                             return true; // ignore diagonal swipes
-                        } else if (deltaX < -MOVEMENT_THRESHOLD) { // swipe left
-                            addBook();
+//                        } else if (deltaX < -MOVEMENT_THRESHOLD) { // swipe left
+//                            addBook();
                         } else if (deltaY < -MOVEMENT_THRESHOLD) { // swipe up
                             clearFields();
                         }
@@ -310,6 +295,32 @@ public class MainActivity extends AppCompatActivity {
         public boolean onDoubleTap(MotionEvent e) {
             clearFields();
             return true;
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            float deltaX = e2.getX() - e1.getX();
+            if (Math.abs(deltaX) > 150) {
+                String priceStr = etPrice.getText().toString();
+                float price = priceStr.isEmpty() ? 0 : Float.parseFloat(priceStr);
+                etPrice.setText(String.valueOf(price + Math.round(distanceX)));
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            if (velocityX > 1000) {
+                moveTaskToBack(true);
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+            loadBooks();
         }
     }
 }
