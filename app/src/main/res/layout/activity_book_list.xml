@@ -34,7 +34,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/right_guideline"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
-        app:layout_constraintTop_toTopOf="@+id/top_guideline">
-    </FrameLayout>
+        app:layout_constraintTop_toTopOf="@+id/top_guideline" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

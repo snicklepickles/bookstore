@@ -1,9 +1,9 @@
 package com.fit2081.bookstoreapp;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import android.os.Bundle;
 
 public class BookListActivity extends AppCompatActivity {
 
@@ -16,7 +16,7 @@ public class BookListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // add back button to toolbar
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 

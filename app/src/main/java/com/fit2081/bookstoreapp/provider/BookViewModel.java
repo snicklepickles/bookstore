@@ -26,11 +26,11 @@ public class BookViewModel extends AndroidViewModel {
         mRepository.insert(book);
     }
 
-    public void deleteLastBook(){
+    public void deleteLastBook() {
         mRepository.deleteLastBook();
     }
 
-    public void deleteAll(){
+    public void deleteAll() {
         mRepository.deleteAll();
     }
 }

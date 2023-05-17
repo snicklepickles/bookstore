@@ -12,7 +12,7 @@ import com.fit2081.bookstoreapp.provider.Book;
 
 import java.util.List;
 
-public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder>{
+public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     private List<Book> data;
 
     public void setData(List<Book> data) {

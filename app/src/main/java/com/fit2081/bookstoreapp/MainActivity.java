@@ -1,14 +1,5 @@
 package com.fit2081.bookstoreapp;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.view.GestureDetectorCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -24,6 +15,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.view.GestureDetectorCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.fit2081.bookstoreapp.provider.Book;
 import com.fit2081.bookstoreapp.provider.BookViewModel;
@@ -198,6 +198,25 @@ public class MainActivity extends AppCompatActivity {
         etPrice.setText(prefs.getString(KEY_PRICE, ""));
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.options_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.clear_fields_menu_id) {
+            clearFields();
+        } else if (id == R.id.load_data_menu_id) {
+            loadBooks();
+        }
+        // tell the OS
+        return true;
+    }
+
     private class MyBroadCastReceiver extends BroadcastReceiver {
         // executed when SMSReceiver sends a broadcast
         @Override
@@ -231,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
                 mBookViewModel.deleteAll();
                 mTable.removeValue();
             } else if (id == R.id.list_all_menu_id) {
-                Intent i = new Intent(MainActivity.this,BookListActivity.class);
+                Intent i = new Intent(MainActivity.this, BookListActivity.class);
                 startActivity(i);
             }
             drawerlayout.closeDrawers();
@@ -283,24 +302,5 @@ public class MainActivity extends AppCompatActivity {
         public void onLongPress(MotionEvent e) {
             loadBooks();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.options_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.clear_fields_menu_id) {
-            clearFields();
-        } else if (id == R.id.load_data_menu_id) {
-            loadBooks();
-        }
-        // tell the OS
-        return true;
     }
 }

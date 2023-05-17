@@ -24,11 +24,11 @@ public class BookRepository {
         BookDatabase.databaseWriteExecutor.execute(() -> mBookDao.addBook(book));
     }
 
-    void deleteLastBook(){
+    void deleteLastBook() {
         BookDatabase.databaseWriteExecutor.execute(mBookDao::deleteLastBook);
     }
 
-    void deleteAll(){
+    void deleteAll() {
         BookDatabase.databaseWriteExecutor.execute(mBookDao::deleteAllBooks);
     }
 }

@@ -10,10 +10,6 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = TABLE_NAME)
 public class Book {
     public static final String TABLE_NAME = "books";
-    @PrimaryKey(autoGenerate = true)
-    @NonNull
-    @ColumnInfo(name = "id")
-    private int id;
     @ColumnInfo(name = "bookId")
     private final String bookId;
     @ColumnInfo(name = "bookTitle")
@@ -26,6 +22,10 @@ public class Book {
     private final String description;
     @ColumnInfo(name = "bookPrice")
     private final String price;
+    @PrimaryKey(autoGenerate = true)
+    @NonNull
+    @ColumnInfo(name = "id")
+    private int id;
 
     public Book(String bookId, String title, String isbn, String author, String description, String price) {
         this.bookId = bookId;
@@ -38,6 +38,10 @@ public class Book {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getBookId() {
@@ -56,17 +60,12 @@ public class Book {
         return author;
     }
 
-
     public String getDescription() {
         return description;
     }
 
     public String getPrice() {
         return price;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
 }

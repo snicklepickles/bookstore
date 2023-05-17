@@ -58,67 +58,67 @@
         android:id="@+id/book_id_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:labelFor="@id/book_id"
         android:text="@string/book_id"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/title_label"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
-        app:layout_constraintTop_toTopOf="@id/top_guideline"
-        android:labelFor="@id/book_id"/>
+        app:layout_constraintTop_toTopOf="@id/top_guideline" />
 
     <TextView
         android:id="@+id/isbn_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:labelFor="@id/isbn_id"
         android:text="@string/isbn"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/author_label"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/title_label"
-        android:labelFor="@id/isbn_id"/>
+        app:layout_constraintTop_toBottomOf="@+id/title_label" />
 
     <TextView
         android:id="@+id/price_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:labelFor="@id/price_id"
         android:text="@string/price"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/description_label"
-        android:labelFor="@id/price_id"/>
+        app:layout_constraintTop_toBottomOf="@+id/description_label" />
 
     <TextView
         android:id="@+id/description_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:labelFor="@id/description_id"
         android:text="@string/description"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/price_label"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/author_label"
-        android:labelFor="@id/description_id"/>
+        app:layout_constraintTop_toBottomOf="@+id/author_label" />
 
     <TextView
         android:id="@+id/author_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:labelFor="@id/author_id"
         android:text="@string/author"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/description_label"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/isbn_label"
-        android:labelFor="@id/author_id"/>
+        app:layout_constraintTop_toBottomOf="@+id/isbn_label" />
 
     <TextView
         android:id="@+id/title_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:labelFor="@id/title_id"
         android:text="@string/title"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/isbn_label"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/book_id_label"
-        android:labelFor="@id/title_id"/>
+        app:layout_constraintTop_toBottomOf="@+id/book_id_label" />
 
     <EditText
         android:id="@+id/isbn_id"
