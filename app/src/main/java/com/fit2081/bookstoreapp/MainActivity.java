@@ -59,18 +59,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_layout);
 
+        initViews(savedInstanceState);
+        setupToolbarNavFab();
+        setupGestureListener();
+        loadBooksFromFirebase();
+        registerSmsReceiver();
+    }
+
+    private void initViews(Bundle savedInstanceState) {
         etBookId = findViewById(R.id.book_id);
         etTitle = findViewById(R.id.title_id);
         etIsbn = findViewById(R.id.isbn_id);
         etAuthor = findViewById(R.id.author_id);
         etDescription = findViewById(R.id.description_id);
         etPrice = findViewById(R.id.price_id);
-
         // load attributes after configuration change
-        if (savedInstanceState == null) {
-            loadBooks();
-        }
+        if (savedInstanceState == null) loadBooks();
+    }
 
+    private void setupToolbarNavFab() {
         drawerlayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -85,19 +92,18 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(new MyNavigationListener());
 
-        // request permissions to access SMS
-        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.SEND_SMS, android.Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS}, 0);
-
-        // create and instantiate the local broadcast receiver (listens to messages from SMSReceiver)
-        MyBroadCastReceiver myBroadCastReceiver = new MyBroadCastReceiver();
-
-        // register the broadcast handler with the intent filter that is declared in SMSReceiver
-        registerReceiver(myBroadCastReceiver, new android.content.IntentFilter(SMSReceiver.SMS_FILTER));
-
         // set up the floating action button
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> addBook());
+    }
 
+    private void setupGestureListener() {
+        View gestureView = findViewById(R.id.gesture_view);
+        mDetector = new GestureDetectorCompat(this, new MyGestureListener());
+        gestureView.setOnTouchListener((view, event) -> mDetector.onTouchEvent(event));
+    }
+
+    private void loadBooksFromFirebase() {
         // load the fragment
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
@@ -109,11 +115,15 @@ public class MainActivity extends AppCompatActivity {
         // initialise Firebase database
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         mTable = mDatabase.child("books");
+    }
 
-        // register MyGestureListener
-        View gestureView = findViewById(R.id.gesture_view);
-        mDetector = new GestureDetectorCompat(this, new MyGestureListener());
-        gestureView.setOnTouchListener((view, event) -> mDetector.onTouchEvent(event));
+    private void registerSmsReceiver() {
+        // request permissions to access SMS
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.SEND_SMS, android.Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS}, 0);
+        // create and instantiate the local broadcast receiver (listens to messages from SMSReceiver)
+        MyBroadCastReceiver myBroadCastReceiver = new MyBroadCastReceiver();
+        // register the broadcast handler with the intent filter that is declared in SMSReceiver
+        registerReceiver(myBroadCastReceiver, new android.content.IntentFilter(SMSReceiver.SMS_FILTER));
     }
 
     @SuppressLint("MissingSuperCall")
@@ -188,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
         etPrice.setText(prefs.getString(KEY_PRICE, ""));
     }
 
-    class MyBroadCastReceiver extends BroadcastReceiver {
+    private class MyBroadCastReceiver extends BroadcastReceiver {
         // executed when SMSReceiver sends a broadcast
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -207,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // handle the menu item clicks
-    class MyNavigationListener implements NavigationView.OnNavigationItemSelectedListener {
+    private class MyNavigationListener implements NavigationView.OnNavigationItemSelectedListener {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             // get the id of the selected item
@@ -228,25 +238,6 @@ public class MainActivity extends AppCompatActivity {
             // tell the OS
             return true;
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.options_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.clear_fields_menu_id) {
-            clearFields();
-        } else if (id == R.id.load_data_menu_id) {
-            loadBooks();
-        }
-        // tell the OS
-        return true;
     }
 
     private class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -292,5 +283,24 @@ public class MainActivity extends AppCompatActivity {
         public void onLongPress(MotionEvent e) {
             loadBooks();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.options_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.clear_fields_menu_id) {
+            clearFields();
+        } else if (id == R.id.load_data_menu_id) {
+            loadBooks();
+        }
+        // tell the OS
+        return true;
     }
 }
