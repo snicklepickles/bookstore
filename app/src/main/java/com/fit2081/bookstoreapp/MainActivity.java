@@ -110,38 +110,8 @@ public class MainActivity extends AppCompatActivity {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         mTable = mDatabase.child("books");
 
-        // register onTouchListener
-        View gestureView = findViewById(R.id.gesture_view);
-        gestureView.setOnTouchListener(new View.OnTouchListener() {
-            private float initialX;
-            private float initialY;
-            private final int MOVEMENT_THRESHOLD = 125;
-
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                switch (event.getAction()) {
-                    case (MotionEvent.ACTION_DOWN):
-                        initialX = event.getX();
-                        initialY = event.getY();
-                        return true;
-                    case (MotionEvent.ACTION_UP):
-                        float deltaX = event.getX() - initialX;
-                        float deltaY = event.getY() - initialY;
-                        if (Math.abs(deltaX) > MOVEMENT_THRESHOLD && Math.abs(deltaY) > MOVEMENT_THRESHOLD) {
-                            return true; // ignore diagonal swipes
-//                        } else if (deltaX < -MOVEMENT_THRESHOLD) { // swipe left
-//                            addBook();
-                        } else if (deltaY < -MOVEMENT_THRESHOLD) { // swipe up
-                            clearFields();
-                        }
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-        });
-
         // register MyGestureListener
+        View gestureView = findViewById(R.id.gesture_view);
         mDetector = new GestureDetectorCompat(this, new MyGestureListener());
         gestureView.setOnTouchListener((view, event) -> mDetector.onTouchEvent(event));
     }
