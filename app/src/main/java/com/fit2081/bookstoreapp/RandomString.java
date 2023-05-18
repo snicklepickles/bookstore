@@ -2,6 +2,8 @@ package com.fit2081.bookstoreapp;
 
 import java.util.Random;
 
+// Source: FIT2081 Week 10 Supplementary Materials
+
 public abstract class RandomString {
 
     public static final String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
