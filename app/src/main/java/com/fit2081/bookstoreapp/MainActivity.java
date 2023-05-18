@@ -29,8 +29,8 @@ import com.fit2081.bookstoreapp.provider.Book;
 import com.fit2081.bookstoreapp.provider.BookViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+//import com.google.firebase.database.DatabaseReference;
+//import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Locale;
 import java.util.StringTokenizer;
@@ -49,9 +49,10 @@ public class MainActivity extends AppCompatActivity {
     private EditText etAuthor;
     private EditText etDescription;
     private EditText etPrice;
+    private EditText etYear;
     private DrawerLayout drawerlayout;
     private BookViewModel mBookViewModel;
-    private DatabaseReference mTable;
+//    private DatabaseReference mTable;
     private GestureDetectorCompat mDetector;
 
     @Override
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         initViews(savedInstanceState);
         setupToolbarNavFab();
         setupGestureListener();
-        loadBooksFromFirebase();
+//        loadBooksFromFirebase();
         registerSmsReceiver();
     }
 
@@ -73,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
         etAuthor = findViewById(R.id.author_id);
         etDescription = findViewById(R.id.description_id);
         etPrice = findViewById(R.id.price_id);
+        etYear = findViewById(R.id.year_id);
+        etYear.setText("2023");
         // load attributes after configuration change
         if (savedInstanceState == null) loadBooks();
     }
@@ -103,19 +106,19 @@ public class MainActivity extends AppCompatActivity {
         gestureView.setOnTouchListener((view, event) -> mDetector.onTouchEvent(event));
     }
 
-    private void loadBooksFromFirebase() {
-        // load the fragment
-        getSupportFragmentManager().beginTransaction()
-                .setReorderingAllowed(true)
-                .add(R.id.book_frag, BookListFragment.class, null)
-                .commit();
-
-        mBookViewModel = new ViewModelProvider(this).get(BookViewModel.class);
-
-        // initialise Firebase database
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        mTable = mDatabase.child("books");
-    }
+//    private void loadBooksFromFirebase() {
+//        // load the fragment
+//        getSupportFragmentManager().beginTransaction()
+//                .setReorderingAllowed(true)
+//                .add(R.id.book_frag, BookListFragment.class, null)
+//                .commit();
+//
+//        mBookViewModel = new ViewModelProvider(this).get(BookViewModel.class);
+//
+//        // initialise Firebase database
+//        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+//        mTable = mDatabase.child("books");
+//    }
 
     private void registerSmsReceiver() {
         // request permissions to access SMS
@@ -173,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
         // add book to recycler view
         Book book = new Book(bookId, title, isbn, author, description, priceStr);
         mBookViewModel.insert(book);
-        mTable.push().setValue(book);
+//        mTable.push().setValue(book);
         Log.d("BOOK_APP", "Added book: " + book);
     }
 
@@ -248,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
                 mBookViewModel.deleteLastBook();
             } else if (id == R.id.remove_all_menu_id) {
                 mBookViewModel.deleteAll();
-                mTable.removeValue();
+//                mTable.removeValue();
             } else if (id == R.id.list_all_menu_id) {
                 Intent i = new Intent(MainActivity.this, BookListActivity.class);
                 startActivity(i);
@@ -280,10 +283,15 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
             float deltaX = e2.getX() - e1.getX();
-            if (Math.abs(deltaX) > 150) {
+            float deltaY = e2.getY() - e1.getY();
+            if (Math.abs(deltaX) > 150 && Math.abs(deltaY) < 150) {
                 String priceStr = etPrice.getText().toString();
                 float price = priceStr.isEmpty() ? 0 : Float.parseFloat(priceStr);
                 etPrice.setText(String.valueOf(price + Math.round(distanceX)));
+                return true;
+            } else if (Math.abs(deltaY) > 150 && Math.abs(deltaX) < 150) {
+                int year = Integer.parseInt(etYear.getText().toString());
+                etYear.setText(String.valueOf(year + Math.round(distanceY)));
                 return true;
             }
             return false;
