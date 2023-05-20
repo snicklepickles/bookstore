@@ -25,12 +25,20 @@ import androidx.core.view.GestureDetectorCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.fit2081.bookstoreapp.provider.Book;
 import com.fit2081.bookstoreapp.provider.BookViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-//import com.google.firebase.database.DatabaseReference;
-//import com.google.firebase.database.FirebaseDatabase;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Locale;
 import java.util.StringTokenizer;
@@ -51,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText etPrice;
     private DrawerLayout drawerlayout;
     private BookViewModel mBookViewModel;
-//    private DatabaseReference mTable;
+    //    private DatabaseReference mTable;
     private GestureDetectorCompat mDetector;
 
     @Override
@@ -94,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
         // set up the floating action button
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> addBook());
+        fab.setOnClickListener(view -> new IntentIntegrator(this).initiateScan());
     }
 
     private void setupGestureListener() {
@@ -140,6 +148,75 @@ public class MainActivity extends AppCompatActivity {
         etTitle.setText(savedInstanceState.getString(KEY_TITLE));
         etIsbn.setText(savedInstanceState.getString(KEY_ISBN));
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                String isbn = result.getContents();
+                // Instantiate the RequestQueue.
+                RequestQueue queue = Volley.newRequestQueue(this);
+                String url = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn;
+
+                // Request a string response from the provided URL.
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                        response -> {
+                            try {
+                                // Parse the JSON response
+                                JSONObject jsonResponse = new JSONObject(response);
+
+                                // Check if items exist
+                                if (!jsonResponse.has("items")) {
+                                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "No book found with this ISBN", Toast.LENGTH_LONG).show());
+                                    return;
+                                }
+
+                                // Get the book information from the JSON response
+                                JSONObject volumeInfo = jsonResponse.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo");
+
+                                // Extract the title, authors, and ISBN from the JSON
+                                String title = volumeInfo.has("title") ? volumeInfo.getString("title") : "";
+
+                                // authors is an array, so we need to convert it to a comma-separated string
+                                StringBuilder authors = new StringBuilder();
+                                if (volumeInfo.has("authors")) {
+                                    JSONArray authorsArray = volumeInfo.getJSONArray("authors");
+                                    for (int i = 0; i < authorsArray.length(); i++) {
+                                        authors.append(authorsArray.getString(i));
+                                        if (i < authorsArray.length() - 1) {
+                                            authors.append(", ");
+                                        }
+                                    }
+                                }
+
+                                runOnUiThread(() -> {
+                                    etBookId.setText("");
+                                    etTitle.setText(title);
+                                    etIsbn.setText(isbn);
+                                    etAuthor.setText(authors.toString());
+                                    etDescription.setText("");
+                                    etPrice.setText("");
+                                    Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                                });
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Error parsing book data", Toast.LENGTH_LONG).show());
+                            }
+                        }, error -> {
+                    error.printStackTrace();
+                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Error retrieving book data", Toast.LENGTH_LONG).show());
+                });
+                queue.add(stringRequest);
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
 
     public void addBook() {
         // get attributes
