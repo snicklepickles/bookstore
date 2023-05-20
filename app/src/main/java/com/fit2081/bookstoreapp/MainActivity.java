@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText etAuthor;
     private EditText etDescription;
     private EditText etPrice;
-    private EditText etYear;
     private DrawerLayout drawerlayout;
     private BookViewModel mBookViewModel;
 //    private DatabaseReference mTable;
@@ -63,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         initViews(savedInstanceState);
         setupToolbarNavFab();
         setupGestureListener();
-//        loadBooksFromFirebase();
+        loadBooksFromFirebase();
         registerSmsReceiver();
     }
 
@@ -74,8 +73,6 @@ public class MainActivity extends AppCompatActivity {
         etAuthor = findViewById(R.id.author_id);
         etDescription = findViewById(R.id.description_id);
         etPrice = findViewById(R.id.price_id);
-        etYear = findViewById(R.id.year_id);
-        etYear.setText("2023");
         // load attributes after configuration change
         if (savedInstanceState == null) loadBooks();
     }
@@ -106,19 +103,19 @@ public class MainActivity extends AppCompatActivity {
         gestureView.setOnTouchListener((view, event) -> mDetector.onTouchEvent(event));
     }
 
-//    private void loadBooksFromFirebase() {
-//        // load the fragment
-//        getSupportFragmentManager().beginTransaction()
-//                .setReorderingAllowed(true)
-//                .add(R.id.book_frag, BookListFragment.class, null)
-//                .commit();
-//
-//        mBookViewModel = new ViewModelProvider(this).get(BookViewModel.class);
-//
+    private void loadBooksFromFirebase() {
+        // load the fragment
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .add(R.id.book_frag, BookListFragment.class, null)
+                .commit();
+
+        mBookViewModel = new ViewModelProvider(this).get(BookViewModel.class);
+
 //        // initialise Firebase database
 //        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 //        mTable = mDatabase.child("books");
-//    }
+    }
 
     private void registerSmsReceiver() {
         // request permissions to access SMS
@@ -288,10 +285,6 @@ public class MainActivity extends AppCompatActivity {
                 String priceStr = etPrice.getText().toString();
                 float price = priceStr.isEmpty() ? 0 : Float.parseFloat(priceStr);
                 etPrice.setText(String.valueOf(price + Math.round(distanceX)));
-                return true;
-            } else if (Math.abs(deltaY) > 150 && Math.abs(deltaX) < 150) {
-                int year = Integer.parseInt(etYear.getText().toString());
-                etYear.setText(String.valueOf(year + Math.round(distanceY)));
                 return true;
             }
             return false;

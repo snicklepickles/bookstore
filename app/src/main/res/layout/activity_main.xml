@@ -80,22 +80,12 @@
         android:id="@+id/price_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:labelFor="@id/year_id"
+        android:labelFor="@id/price_id"
         android:text="@string/price"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/year_label"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"
         app:layout_constraintStart_toStartOf="@+id/left_guideline"
         app:layout_constraintTop_toBottomOf="@+id/description_label" />
-
-    <TextView
-        android:id="@+id/year_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:labelFor="@id/price_id"
-        android:text="Year"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"
-        app:layout_constraintStart_toStartOf="@+id/left_guideline" />
 
     <TextView
         android:id="@+id/description_label"
@@ -151,17 +141,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/price_label"
         app:layout_constraintEnd_toStartOf="@+id/right_guideline"
         app:layout_constraintTop_toTopOf="@+id/price_label" />
-
-    <EditText
-        android:id="@+id/year_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="numberDecimal"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/year_label"
-        app:layout_constraintEnd_toStartOf="@+id/right_guideline"
-        app:layout_constraintTop_toTopOf="@+id/year_label" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/left_guideline"
